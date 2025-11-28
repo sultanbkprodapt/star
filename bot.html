@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MovieVerse – Movies & Shows</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* ======= RESET ======= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #050710;
+      color: #f5f5f5;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ======= LAYOUT ======= */
+    .page {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(to right, #050710, #0a1020);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 1.2rem;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 0 0, #00ff85, #00b3ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #050710;
+      box-shadow: 0 0 18px rgba(0, 255, 133, 0.5);
+    }
+
+    .logo span {
+      color: #00ff85;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      opacity: 0.8;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      transition: background 0.2s, opacity 0.2s, transform 0.1s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.06);
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .nav-links a.active {
+      background: rgba(0, 255, 133, 0.1);
+      color: #00ff85;
+      opacity: 1;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 260px;
+      flex: 1;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.4rem 0.9rem 0.4rem 2rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(10, 16, 32, 0.9);
+      color: #f5f5f5;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .search-box input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .search-box span {
+      position: absolute;
+      left: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    .btn-auth {
+      font-size: 0.8rem;
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid rgba(0, 255, 133, 0.4);
+      background: rgba(0, 255, 133, 0.08);
+      color: #00ffb3;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+
+    .btn-auth:hover {
+      background: rgba(0, 255, 133, 0.2);
+      box-shadow: 0 0 18px rgba(0, 255, 133, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* ======= HERO / FILTERS ======= */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 2rem;
+    }
+
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-text {
+      flex: 1 1 260px;
+    }
+
+    .hero-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .hero-title span {
+      color: #00ff85;
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      max-width: 480px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 133, 0.4);
+      font-size: 0.7rem;
+      color: #00ff85;
+      margin-bottom: 0.4rem;
+      background: rgba(0, 255, 133, 0.06);
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #00ff85;
+      box-shadow: 0 0 10px rgba(0, 255, 133, 0.7);
+    }
+
+    .filters {
+      flex: 1 1 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      opacity: 0.85;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s, transform 0.1s, border 0.2s;
+    }
+
+    .pill:hover {
+      background: rgba(255, 255, 255, 0.06);
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .pill.active {
+      background: rgba(0, 255, 133, 0.12);
+      border-color: rgba(0, 255, 133, 0.8);
+      color: #00ff85;
+      opacity: 1;
+    }
+
+    .filter-label {
+      opacity: 0.7;
+    }
+
+    /* ======= MOVIE GRID ======= */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .section-subtitle {
+      font-size: 0.75rem;
+      opacity: 0.6;
+    }
+
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .movie-card {
+      background: radial-gradient(circle at 0 0, rgba(0, 255, 133, 0.07), #080b17);
+      border-radius: 16px;
+      padding: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out,
+        border 0.15s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .movie-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      background: radial-gradient(circle at top, rgba(0, 255, 133, 0.15), transparent 55%);
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.6);
+      border-color: rgba(0, 255, 133, 0.4);
+    }
+
+    .movie-card:hover::before {
+      opacity: 1;
+    }
+
+    .poster {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #141a2e, #04060f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poster-tag {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      padding: 0.12rem 0.4rem;
+      font-size: 0.65rem;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .poster-gradient {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 0 0, rgba(0, 255, 133, 0.4), transparent 50%);
+      opacity: 0.4;
+      mix-blend-mode: screen;
+    }
+
+    .poster-text {
+      position: relative;
+      z-index: 1;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .play-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .movie-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+    }
+
+    .movie-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .movie-meta {
+      display: flex;
+      justify-content: space-between;
+      opacity: 0.7;
+      font-size: 0.7rem;
+    }
+
+    .tag-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.1rem;
+    }
+
+    .tag-row-left {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .tag {
+      padding: 0.08rem 0.35rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.65rem;
+      opacity: 0.9;
+    }
+
+    .quality {
+      border: 1px solid rgba(0, 255, 133, 0.7);
+      color: #00ff85;
+      background: rgba(0, 255, 133, 0.08);
+    }
+
+    .lang {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-watch {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #00ff85, #00c3ff);
+      color: #050710;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(0, 255, 133, 0.5);
+      transition: transform 0.1s, box-shadow 0.15s;
+    }
+
+    .btn-watch:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0, 255, 133, 0.6);
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.7rem;
+      opacity: 0.65;
+      padding: 0.7rem 1rem 1rem;
+      text-align: center;
+      background: #050710;
+    }
+
+    /* ======= RESPONSIVE ======= */
+    @media (max-width: 768px) {
+      .nav {
+        flex-wrap: wrap;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .search-box {
+        max-width: none;
+      }
+
+      .hero {
+        align-items: flex-start;
+      }
+
+      .filters {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- HEADER / NAVBAR -->
+    <header>
+      <div class="nav">
+        <div class="logo">
+          <div class="logo-mark">M</div>
+          Movie<span>Verse</span>
+        </div>
+
+        <nav class="nav-links">
+          <a href="#" class="active">Home</a>
+          <a href="#">Movies</a>
+          <a href="#">Series</a>
+          <a href="#">Latest</a>
+        </nav>
+
+        <div class="nav-right">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="Search movies, shows..." />
+          </div>
+          <button class="btn-auth">Sign In</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+      <!-- HERO + FILTERS -->
+      <section class="hero">
+        <div class="hero-text">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            100% Legal HD Streaming
+          </div>
+          <h1 class="hero-title">
+            Watch the latest <span>Movies & Web Series</span>
+          </h1>
+          <p class="hero-subtitle">
+            Explore a curated collection of HD content in multiple languages.
+            Click any card to start watching on your preferred legal platform.
+          </p>
+        </div>
+
+        <div class="filters">
+          <div class="filter-row">
+            <span class="filter-label">Language:</span>
+            <button class="pill active">All</button>
+            <button class="pill">Telugu</button>
+            <button class="pill">Hindi</button>
+            <button class="pill">Tamil</button>
+            <button class="pill">English</button>
+          </div>
+          <div class="filter-row">
+            <span class="filter-label">Format:</span>
+            <button class="pill active">All</button>
+            <button class="pill">HD</button>
+            <button class="pill">4K</button>
+            <button class="pill">Dubbed</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- MOVIE GRID -->
+      <section>
+        <div class="section-header">
+          <div class="section-title">Trending Now</div>
+          <div class="section-subtitle">Updated daily with fresh titles</div>
+        </div>
+
+        <div class="movie-grid">
+          <!-- CARD 1 -->
+          <article class="movie-card">
+            <div class="poster">
+              <div class="poster-gradient"></div>
+              <span class="poster-tag">New</span>
+              <div class="poster-text">ACTION BLOCKBUSTER</div>
+              <div class="play-badge">▶</div>
+            </div>
+            <div class="movie-info">
+              <div class="movie-title">Shadow City</div>
+              <div class="movie-meta">
+                <span>2025 • 2h 12m</span>
+                <span>Thriller</span>
+              </div>
+              <div class="tag-row">
+                <div class="tag-row-left">
+                  <span class="tag quality">HD</span>
+                  <span class="tag lang">Telugu</span>
+                </div>
+                <button class="btn-watch">Watch</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 2 -->
+          <article class="movie-card">
+            <div class="poster">
+              <div class="poster-gradient"></div>
+              <span class="poster-tag">Top Rated</span>
+              <div class="poster-text">ROMANTIC TALE</div>
+              <div class="play-badge">▶</div>
+            </div>
+            <div class="movie-info">
+              <div class="movie-title">Rain of Memories</div>
+              <div class="movie-meta">
+                <span>2024 • 2h 5m</span>
+                <span>Romance</span>
+              </div>
+              <div class="tag-row">
+                <div class="tag-row-left">
+                  <span class="tag quality">4K</span>
+                  <span class="tag lang">Hindi</span>
+                </div>
+                <button class="btn-watch">Watch</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 3 -->
+          <article class="movie-card">
+            <div class="poster">
+              <div class="poster-gradient"></div>
+              <span class="poster-tag">Dubbed</span>
+              <div class="poster-text">SPACE ODYSSEY</div>
+              <div class="play-badge">▶</div>
+            </div>
+            <div class="movie-info">
+              <div class="movie-title">Galaxy Riders</div>
+              <div class="movie-meta">
+                <span>2023 • 1h 58m</span>
+                <span>Sci-Fi</span>
+              </div>
+              <div class="tag-row">
+                <div class="tag-row-left">
+                  <span class="tag quality">HD</span>
+                  <span class="tag lang">Tamil</span>
+                </div>
+                <button class="btn-watch">Watch</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 4 -->
+          <article class="movie-card">
+            <div class="poster">
+              <div class="poster-gradient"></div>
+              <span class="poster-tag">Family</span>
+              <div class="poster-text">FAMILY DRAMA</div>
+              <div class="play-badge">▶</div>
+            </div>
+            <div class="movie-info">
+              <div class="movie-title">Home Again</div>
+              <div class="movie-meta">
+                <span>2022 • 2h 20m</span>
+                <span>Drama</span>
+              </div>
+              <div class="tag-row">
+                <div class="tag-row-left">
+                  <span class="tag quality">HD</span>
+                  <span class="tag lang">Telugu</span>
+                </div>
+                <button class="btn-watch">Watch</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 5 -->
+          <article class="movie-card">
+            <div class="poster">
+              <div class="poster-gradient"></div>
+              <span class="poster-tag">Series</span>
+              <div class="poster-text">CRIME SERIES</div>
+              <div class="play-badge">▶</div>
+            </div>
+            <div class="movie-info">
+              <div class="movie-title">Midnight Cases</div>
+              <div class="movie-meta">
+                <span>2025 • S1</span>
+                <span>Crime</span>
+              </div>
+              <div class="tag-row">
+                <div class="tag-row-left">
+                  <span class="tag quality">HD</span>
+                  <span class="tag lang">English</span>
+                </div>
+                <button class="btn-watch">Watch</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 6 -->
+          <article class="movie-card">
+            <div class="poster">
+              <div class="poster-gradient"></div>
+              <span class="poster-tag">Comedy</span>
+              <div class="poster-text">FULL FUN</div>
+              <div class="play-badge">▶</div>
+            </div>
+            <div class="movie-info">
+              <div class="movie-title">Room No. 404</div>
+              <div class="movie-meta">
+                <span>2023 • 1h 40m</span>
+                <span>Comedy</span>
+              </div>
+              <div class="tag-row">
+                <div class="tag-row-left">
+                  <span class="tag quality">HD</span>
+                  <span class="tag lang">Telugu</span>
+                </div>
+                <button class="btn-watch">Watch</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      © 2025 MovieVerse. Use this template only for legal streaming or your own
+      original content.
+    </footer>
+  </div>
+</body>
+</html>
